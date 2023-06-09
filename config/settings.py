@@ -42,12 +42,15 @@ INSTALLED_APPS = [
 
     # Third-party packages
     'rest_framework',
-
+    'rest_framework_swagger',
+    'drf_yasg',
+    'django_seed',
 
     # Our apps
     'company.apps.CompanyConfig',
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
+    # 'main.apps.MainConfig',
 ]
 
 # AUTH_USER_MODEL = 'users.User'
