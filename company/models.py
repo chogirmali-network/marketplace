@@ -22,7 +22,7 @@ class Company(models.Model):
     ceo = models.OneToOneField(User, on_delete=models.PROTECT)
     info = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now=True)
+    update_at = models.DateTimeField(auto_now=True)
 
 
     def __str__(self) -> str:
@@ -39,7 +39,7 @@ class Employee(models.Model):
     work_started_at = models.DateTimeField()
     work_ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now=True)
+    update_at = models.DateTimeField(auto_now=True)
 
     
     def __str__(self) -> str:

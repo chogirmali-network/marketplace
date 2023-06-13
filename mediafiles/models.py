@@ -36,6 +36,8 @@ class Badge(models.Model):
     code = models.CharField(max_length=300)
     priority = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     logo = models.ImageField(upload_to='badges/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
     def __str__(self) -> str:
