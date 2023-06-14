@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import configurations
-import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,7 +41,7 @@ INSTALLED_APPS = [
 
     # Third-party packages
     'rest_framework',
-    # 'rest_framework_swagger',
+    'rest_framework_swagger',
     'drf_yasg',
     'django_seed',
 
@@ -50,8 +49,7 @@ INSTALLED_APPS = [
     'company.apps.CompanyConfig',
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
-    # 'main.apps.MainConfig',
-
+    'main.apps.MainConfig',
 ]
 
 # AUTH_USER_MODEL = 'users.User'
@@ -140,9 +138,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 # MEDIA FILES
-MEDIA_ROOT = str(BASE_DIR.joinpath("media"))
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = ' media/'
 
 
