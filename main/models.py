@@ -18,6 +18,7 @@ class Post(models.Model):
     parse_mode = models.CharField(max_length=20, choices=PARSE_MODES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
 
     def __str__(self) -> str:

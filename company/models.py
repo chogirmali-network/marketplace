@@ -22,7 +22,8 @@ class Company(models.Model):
     ceo = models.OneToOneField(User, on_delete=models.PROTECT)
     info = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
 
     def __str__(self) -> str:
@@ -30,7 +31,7 @@ class Company(models.Model):
 
     class Meta:
         db_table = 'companies'
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'Companies'
 
 
 class Employee(models.Model):
@@ -39,7 +40,8 @@ class Employee(models.Model):
     work_started_at = models.DateTimeField()
     work_ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     
     def __str__(self) -> str:
