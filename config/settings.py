@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import configurations
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     # Third-party packages
     'rest_framework',
-    'rest_framework_swagger',
+    # 'rest_framework_swagger',
     'drf_yasg',
     'django_seed',
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
     # 'main.apps.MainConfig',
+
 ]
 
 # AUTH_USER_MODEL = 'users.User'
@@ -102,6 +103,7 @@ DATABASES = {
 }
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -137,12 +139,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
+# MEDIA FILES
+MEDIA_ROOT = str(BASE_DIR.joinpath("media"))
+MEDIA_URL = ' media/'
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -3,6 +3,10 @@ import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from mediafiles.models import Badge
+from django.db import models, transaction
+from django.utils.translation import gettext_lazy as _
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class User(models.Model):
@@ -51,7 +55,6 @@ class SubscriptionPlan(models.Model):
     get_badges = models.PositiveBigIntegerField(validators=[MinValueValidator(4), MaxValueValidator(1000)], default=3)
     themes = models.PositiveBigIntegerField(validators=[MinValueValidator(3), MaxValueValidator(1000)], default=2)
 
-
     def __str__(self) -> str:
         return f"Subscription - {self.user.first_name} to {self.plan}"
 
@@ -69,7 +72,7 @@ class Project(models.Model):
 
 
     def __str__(self) -> str:
-        return f'Project - {self.title}'
+        return f'Project - {self.name}'
 
     class Meta:
         db_table = 'projects'
@@ -77,8 +80,8 @@ class Project(models.Model):
 
 
 class Client(models.Model):
-    employee = models.ForeignKey(User)
-    client = models.ForeignKey(User)
+    employee = models.ForeignKey(User, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
     def __str__(self) -> str:
@@ -95,7 +98,7 @@ class Team(models.Model):
 
 
     def __str__(self):
-        return f'Team - {self.title}'
+        return f'Team - {self.name}'
 
     class Meta:
         db_table = 'teams'
@@ -163,3 +166,16 @@ class RankingProject(models.Model):
         db_table = 'ranking_projects'
 
 
+
+class Wallet(models.Model):
+    amount = models.DecimalField(max_digits=12,decimal_places=2)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"user info:{self.user}"
+    
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Wallet.objects.create(user=instance)
