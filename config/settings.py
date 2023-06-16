@@ -93,14 +93,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': configurations.DB_ENGINE,
-        'NAME': configurations.DB_NAME,
-        'USER': configurations.DB_USER,
-        'PASSWORD': configurations.DB_PASSWORD,
-        'HOST': configurations.DB_HOST,
-        'PORT': configurations.DB_PORT,
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'MarketPlace',
+        'USER': 'postgres',
+        'PASSWORD': 'tillo123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation

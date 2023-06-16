@@ -11,40 +11,41 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('company', '0002_company_update_at_employee_update_at_and_more'),
         ('mediafiles', '0002_badge'),
+        ('users', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Project',
+            name='DeletedBadge',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=500)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('discount', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)])),
+                ('code', models.CharField(max_length=300)),
+                ('priority', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)])),
+                ('logo', models.ImageField(upload_to='badges/')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'db_table': 'projects',
+                'db_table': 'deleted_badges',
             },
         ),
         migrations.CreateModel(
-            name='Team',
+            name='DeletedImage',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=1000)),
-                ('description', models.TextField(blank=True, null=True)),
+                ('image', models.ImageField(upload_to='images/')),
+                ('object_id', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'db_table': 'teams',
+                'db_table': 'deleted_images',
             },
         ),
         migrations.CreateModel(
-            name='User',
+            name='DeletedUser',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('first_name', models.CharField(max_length=2000)),
@@ -60,11 +61,24 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'db_table': 'users',
+                'db_table': 'deleted_users',
             },
         ),
         migrations.CreateModel(
-            name='UserBadge',
+            name='DeletedVideo',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('video', models.TextField()),
+                ('object_id', models.TextField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                'db_table': 'deleted_videos',
+            },
+        ),
+        migrations.CreateModel(
+            name='DeletedUserBadge',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -73,11 +87,11 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
-                'db_table': 'user_badges',
+                'db_table': 'deleted_user_badges',
             },
         ),
         migrations.CreateModel(
-            name='TeamBadge',
+            name='DeletedTeamBadge',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -86,16 +100,25 @@ class Migration(migrations.Migration):
                 ('team', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.team')),
             ],
             options={
-                'db_table': 'team_badges',
+                'db_table': 'deleted_team_badges',
             },
         ),
-        migrations.AddField(
-            model_name='team',
-            name='owner',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='users.user'),
+        migrations.CreateModel(
+            name='DeletedTeam',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=1000)),
+                ('description', models.TextField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('owner', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
+            ],
+            options={
+                'db_table': 'deleted_teams',
+            },
         ),
         migrations.CreateModel(
-            name='SubscriptionPlan',
+            name='DeletedSubscriptionPlan',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('plan', models.CharField(choices=[('free', 'Free'), ('custom', 'Custom')], default='free', max_length=1000)),
@@ -109,11 +132,11 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
-                'db_table': 'subscription_plans',
+                'db_table': 'deleted_subscription_plans',
             },
         ),
         migrations.CreateModel(
-            name='SavedProject',
+            name='DeletedSavedProject',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('saved_date', models.DateTimeField(auto_now_add=True)),
@@ -123,11 +146,11 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
-                'db_table': 'saved_projects',
+                'db_table': 'deleted_saved_projects',
             },
         ),
         migrations.CreateModel(
-            name='RankingProject',
+            name='DeletedRankingProject',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('stars', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(5)])),
@@ -137,16 +160,41 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
-                'db_table': 'ranking_projects',
+                'db_table': 'deleted_ranking_projects',
             },
         ),
-        migrations.AddField(
-            model_name='project',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user'),
+        migrations.CreateModel(
+            name='DeletedProject',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=500)),
+                ('description', models.TextField(blank=True, null=True)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('discount', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)])),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
+            ],
+            options={
+                'db_table': 'deleted_projects',
+            },
         ),
         migrations.CreateModel(
-            name='Member',
+            name='DeletedPost',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.TextField()),
+                ('parse_mode', models.CharField(blank=True, choices=[('html', 'HTML'), ('markdown', 'MARKDOWN'), ('cybersell', 'CYBERSELL')], max_length=20, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('author', models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.user')),
+            ],
+            options={
+                'db_table': 'deleted_posts',
+            },
+        ),
+        migrations.CreateModel(
+            name='DeletedMember',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -155,20 +203,56 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
-                'db_table': 'members',
+                'db_table': 'deleted_members',
             },
         ),
         migrations.CreateModel(
-            name='Client',
+            name='DeletedEmployee',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('work_started_at', models.DateTimeField()),
+                ('work_ended_at', models.DateTimeField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('update_at', models.DateTimeField(auto_now=True)),
+                ('company', models.ManyToManyField(to='company.company')),
+                ('user', models.ManyToManyField(to='users.user')),
+            ],
+            options={
+                'db_table': 'deleted_employees',
+            },
+        ),
+        migrations.CreateModel(
+            name='DeletedCompany',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('logo', models.ImageField(upload_to='company_logoes/')),
+                ('field', models.CharField(choices=[('it', 'Information Technologies'), ('ecommerce', 'E-Commerce'), ('marketing_sales', 'Marketing & Sales')], max_length=500)),
+                ('address', models.TextField(blank=True, null=True)),
+                ('latitude', models.BigIntegerField(blank=True, null=True)),
+                ('longitude', models.BigIntegerField(blank=True, null=True)),
+                ('phone_number', models.CharField(max_length=500)),
+                ('info', models.TextField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('update_at', models.DateTimeField(auto_now=True)),
+                ('ceo', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to='users.user')),
+            ],
+            options={
+                'verbose_name_plural': 'Categories',
+                'db_table': 'deleted_companies',
+            },
+        ),
+        migrations.CreateModel(
+            name='DeletedClient',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('client', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='clients', to='users.user')),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='employees', to='users.user')),
+                ('client', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='deleted_employees', to='users.user')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='deleted_clients', to='users.user')),
             ],
             options={
-                'db_table': 'clients',
+                'db_table': 'deleted_clients',
             },
         ),
     ]

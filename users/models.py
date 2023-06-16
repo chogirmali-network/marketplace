@@ -82,8 +82,8 @@ class Project(models.Model):
 
 
 class Client(models.Model):
-    employee = models.ForeignKey(User,on_delete=models.CASCADE)
-    client = models.ForeignKey(User,on_delete=models.CASCADE)
+    employee = models.ForeignKey(User,on_delete=models.CASCADE, related_name='employees')
+    client = models.ForeignKey(User,on_delete=models.CASCADE,related_name='clients')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
