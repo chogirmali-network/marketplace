@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'MarketPlace',
+        'NAME': 'market1',
         'USER': 'postgres',
         'PASSWORD': 'tillo123',
         'HOST': 'localhost',
