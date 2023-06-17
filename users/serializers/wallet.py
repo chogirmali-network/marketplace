@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from users.models import Wallet
+from users.models import Wallet, User
 
 
-class WalletSerializers(serializers.Serializer):
+class WalletSerializers(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
+
     class Meta:
-        model = Wallet 
-        fields = ('amount', 'date')
-        read_only_fields = ("id")
-
-    def get_cat(self, obj):
-        return obj.amount
+        model = Wallet
+        fields = ('id', 'user', 'hamyon_raqami', 'is_active')
+        read_only_fields = ('id', 'hamyon_raqami', 'is_active')

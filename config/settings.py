@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'company.apps.CompanyConfig',
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
-    # 'main.apps.MainConfig',
+    'main.apps.MainConfig',
 
 ]
 

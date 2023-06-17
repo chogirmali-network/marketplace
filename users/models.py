@@ -167,15 +167,16 @@ class RankingProject(models.Model):
 
 
 
+
 class Wallet(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    card_number = models.CharField(max_length=12, unique=True, default=str(uuid.uuid4())[:12])
     amount = models.DecimalField(max_digits=12,decimal_places=2)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return f"user info:{self.user}"
     
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Wallet.objects.create(user=instance)
+    
