@@ -37,13 +37,13 @@ class Company(models.Model):
 class Employee(models.Model):
     company = models.ManyToManyField(Company)
     user = models.ManyToManyField(User)
-    work_started_at = models.DateTimeField()
+    work_started_at = models.DateTimeField(null=True, blank=True)
     work_ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-    
+
     def __str__(self) -> str:
         return f"Employee of {self.company.name}"
 

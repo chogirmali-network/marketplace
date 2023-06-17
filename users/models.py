@@ -211,9 +211,13 @@ class RankingProject(models.Model):
     class Meta:
         db_table = 'ranking_projects'
 
+
 class SoldProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
 
     def __str__(self) -> str:
@@ -221,3 +225,20 @@ class SoldProject(models.Model):
 
     class Meta:
         db_table = 'sold_projects'
+
+
+class Wallet(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    account = models.DecimalField(max_digits=20, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+
+    def __str__(self) -> str:
+        return f'Wallet of {self.user.first_name}'
+
+    class Meta:
+        db_table = 'wallets'
+
