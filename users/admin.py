@@ -3,7 +3,6 @@ from .models import User as CustomUser, SubscriptionPlan, Project, Client, Team,
 
 admin.site.register(CustomUser)
 admin.site.register(SubscriptionPlan)
-admin.site.register(SubscriptionPlan)
 admin.site.register(Project)
 admin.site.register(Client)
 admin.site.register(Team)

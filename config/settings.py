@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
+    "notifications.apps.NotificationsConfig"
 ]
 
 # AUTH_USER_MODEL = 'users.User'
@@ -91,12 +92,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': configurations.DB_ENGINE,
-        'NAME': configurations.DB_NAME,
-        'USER': configurations.DB_USER,
-        'PASSWORD': configurations.DB_PASSWORD,
-        'HOST': configurations.DB_HOST,
-        'PORT': configurations.DB_PORT,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -124,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uz'
 
 TIME_ZONE = 'Asia/Tashkent'
 

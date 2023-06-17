@@ -14,7 +14,7 @@ class Post(models.Model):
     )
 
     content = models.TextField()
-    author = models.OneToOneField(User, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     parse_mode = models.CharField(max_length=20, choices=PARSE_MODES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
