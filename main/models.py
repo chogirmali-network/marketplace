@@ -45,3 +45,34 @@ class Notification(models.Model):
         db_table = 'notifications'
 
 
+class Quiz(models.Model):
+    Question = "question"
+    Multiple = "multiple"
+    With_custom_answer = "with_custom_answer"
+    Vote = "vote"
+    TYPES = (
+        (Question, "Question"),
+        (Multiple, 'Multiple'),
+        (With_custom_answer, 'With_custom_answer'),
+        (Vote, 'Vote')
+    )
+    author = models.OneToOneField(User,on_delete=models.CASCADE)
+    type = models.CharField(max_length=25, choices=TYPES, default=Question)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateField(null=True, blank=True)
+    
+    # def __str__(self) -> str:
+    #     return self.author
+    
+    class Meta:
+        db_table = 'Quiz'
+        
+        
+class Answer(models.Model):
+    question = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'Answer'
