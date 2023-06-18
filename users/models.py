@@ -3,10 +3,8 @@ import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from mediafiles.models import Badge
-from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+from .utils.generate_referral_code import generate_referral_code
 
 
 class User(models.Model):
@@ -26,7 +24,7 @@ class User(models.Model):
     token = models.TextField()
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     language = models.CharField(max_length=5, choices=LANGUAGES, null=True, blank=True)
-    referral_code = models.CharField(max_length=20, null=True, blank=True)
+    referral_code = models.CharField(max_length=20, null=True,unique=True, blank=True)
     password = models.TextField()
     two_step_verification_password = models.TextField()
 
@@ -36,7 +34,12 @@ class User(models.Model):
 
     class Meta:
         db_table = "users"
-
+    
+    def save(self, *args, **kwargs):
+        if not self.referral_code:
+            old_referrals = list(User.objects.values_list('referral_code', flat=True))
+            self.referral_code = generate_referral_code(old_referrals)
+        super().save(*args, **kwargs) 
 
 class SubscriptionPlan(models.Model):
     FREE = 'free'
