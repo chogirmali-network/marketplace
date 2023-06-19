@@ -29,6 +29,7 @@ urlpatterns = [
         path('users/', include(('users.urls', 'users'), namespace='users')),
         path('company/', include(('company.urls', 'company'), namespace='company')),
         path('mediafiles/', include(('mediafiles.urls', 'mediafiles'), namespace='mediafiles')),
+        path('main/', include(('main.urls', 'main'), namespace='main')),
     ]))
 ]
 

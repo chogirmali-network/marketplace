@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from mediafiles.models import Badge
+
 
 class User(models.Model):
     GITHUB = 'github'
@@ -74,7 +74,7 @@ class SubscriptionPlan(models.Model):
     join_team = models.PositiveBigIntegerField(validators=[MinValueValidator(3), MaxValueValidator(1000)], default=2)
     get_badges = models.PositiveBigIntegerField(validators=[MinValueValidator(4), MaxValueValidator(1000)], default=3)
     themes = models.PositiveBigIntegerField(validators=[MinValueValidator(3), MaxValueValidator(1000)], default=2)
-    price_monthly = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    price_monthly = models.DecimalField(max_digits=20, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -153,7 +153,7 @@ class Member(models.Model):
 
 class TeamBadge(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    badge = models.ForeignKey('mediafiles.Badge', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -168,7 +168,7 @@ class TeamBadge(models.Model):
 
 class UserBadge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    badge = models.ForeignKey('mediafiles.Badge', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)

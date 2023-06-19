@@ -2,7 +2,7 @@ from django.db import models
 from users.models import User
 
 
-class Post(models.Model):
+class Message(models.Model):
     HTML = 'html'
     MARKDOWN = 'markdown'
     CYBERSELL = 'cybersell'
@@ -14,7 +14,7 @@ class Post(models.Model):
     )
 
     content = models.TextField()
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    object_id = models.TextField()
     parse_mode = models.CharField(max_length=20, choices=PARSE_MODES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

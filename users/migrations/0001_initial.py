@@ -27,6 +27,9 @@ class Migration(migrations.Migration):
                 ('referral_code', models.CharField(blank=True, max_length=20, null=True)),
                 ('password', models.TextField()),
                 ('two_step_verification_password', models.TextField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True))
             ],
             options={
                 'db_table': 'users',
@@ -43,6 +46,10 @@ class Migration(migrations.Migration):
                 ('get_badges', models.PositiveBigIntegerField(default=3, validators=[django.core.validators.MinValueValidator(4), django.core.validators.MaxValueValidator(1000)])),
                 ('themes', models.PositiveBigIntegerField(default=2, validators=[django.core.validators.MinValueValidator(3), django.core.validators.MaxValueValidator(1000)])),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
+                ('price_monthly', models.DecimalField(max_digits=20, decimal_places=2))
             ],
             options={
                 'db_table': 'subscription_plans',

@@ -1,11 +1,8 @@
 from django.urls import path, include
-from users.views import UserCreateView, UserDetailView
+from users.views import UserView
 
 
 urlpatterns = [
-    path('user/', include([
-        path('detail/<int:user_id>', UserDetailView.as_view(), name='user-detail'),
-        path('create/', UserCreateView.as_view(), name='user-create'),
-    ]))
+    path('users', UserView.as_view(), name='users'),
+    path('user/<int:user_id>', UserView.as_view(), name='user-detail'),
 ]
-

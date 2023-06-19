@@ -151,15 +151,19 @@ MEDIA_URL = ' media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.linkedin.LinkedinOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_URL = 'logout'
-LOGOUT_REDIRECT_URL = 'login'
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'
+# AUTHENTICATION_BACKENDS = [
+#     'social_core.backends.linkedin.LinkedinOAuth2',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
+
+# LOGIN_URL = 'login'
+# LOGIN_REDIRECT_URL = 'home'
+# LOGOUT_URL = 'logout'
+# LOGOUT_REDIRECT_URL = 'login'
+
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'
