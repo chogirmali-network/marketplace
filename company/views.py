@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from .serializers import CompanySerializer, EmployeeSerializer
 from .models import Company, Employee
+from django.utils import timezone
 
 
 class CompanyView(APIView):
@@ -34,7 +35,9 @@ class CompanyView(APIView):
             return Response(data=serializer.errors)
 
     def delete(self, request, company_id):
-        Company.objects.filter(id=company_id).delete()
+        company = get_object_or_404(Company, id=company_id)
+        company.deleted_at = timezone.now()
+        company.save()
         return Response(data={}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -56,10 +59,14 @@ class EmployeeView(APIView):
 
     def put(self, request, employee_id):
         isinstance = get_object_or_404(Employee, id=employee_id)
-        serializer = EmployeeSerializer(instance=isinstance, data=request.data, partial=True)
+        serializer = EmployeeSerializer(
+            instance=isinstance, data=request.data, partial=True
+        )
         serializer.save()
         return Response({}, status=status.HTTP_200_OK)
 
     def delete(self, request, employee_id):
-        Employee.objects.filter(id=employee_id).delete()
+        employee = get_object_or_404(Employee, id=employee_id)
+        employee.deleted_at = timezone.now()
+        employee.save()
         return Response(data={}, status=status.HTTP_204_NO_CONTENT)
