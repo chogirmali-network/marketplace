@@ -91,15 +91,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': configurations.DB_ENGINE,
-        'NAME': configurations.DB_NAME,
-        'USER': configurations.DB_USER,
-        'PASSWORD': configurations.DB_PASSWORD,
-        'HOST': configurations.DB_HOST,
-        'PORT': configurations.DB_PORT,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 # Password validation

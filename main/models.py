@@ -44,4 +44,27 @@ class Notification(models.Model):
     class Meta:
         db_table = 'notifications'
 
+class Question(models.Model):
+    Quiz = "quiz"
+    Multiple = "multiple"
+    With_custom_answer = "with_custom_answer"
+    Vote = "vote"
+    TYPES = (
+        (Quiz,"Quiz"),
+        (Multiple,"Multiple"),
+        (With_custom_answer,"With_custom_answer"),
+        (Vote,"Vote")
+    )
+    question = models.CharField(max_length=255)
+    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=30,choices=TYPES, default=Quiz)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
 
+
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question,on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
