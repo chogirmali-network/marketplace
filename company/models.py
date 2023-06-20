@@ -3,24 +3,15 @@ from django.contrib.auth.models import User
 
 
 class Company(models.Model):
-    IT = 'it'
-    ECOMMERCE = 'ecommerce'
-    MARKETING_SALES = 'marketing_sales'
-
-    FIELDS = (
-        (IT, 'Information Technologies'),
-        (ECOMMERCE, 'E-Commerce'),
-        (MARKETING_SALES, 'Marketing & Sales')
-    )
     name = models.CharField(max_length=100)
     logo = models.ImageField(upload_to='company_logoes/')
-    field = models.CharField(max_length=500, choices=FIELDS)
+    field = models.ForeignKey('company.CompanyField', on_delete=models.CASCADE)
     address = models.TextField(null=True, blank=True)
     latitude = models.BigIntegerField(null=True, blank=True)
     longitude = models.BigIntegerField(null=True, blank=True)
     phone_number = models.CharField(max_length=500)
     ceo = models.OneToOneField(User, on_delete=models.PROTECT)
-    info = models.TextField()
+    info = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -50,3 +41,13 @@ class Employee(models.Model):
     class Meta:
         db_table = 'employees'
 
+
+class CompanyField(models.Model):
+    name = models.CharField(max_length=1000)
+
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        db_table = 'company_fields'

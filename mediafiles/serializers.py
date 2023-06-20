@@ -20,8 +20,6 @@ class VideoSerializer(serializers.ModelSerializer):
         instance.category = validated_data.get('category', instance.category)
         instance.price = validated_data.get('title', instance.price)
         instance.discount = validated_data.get('discount', instance.discount)
-        instance.updated_at = validated_data.get('updated_at', instance.updated_at)
-        instance.deleted_at = validated_data.get('deleted_at', instance.deleted_at)
         instance.save()
         return instance
 

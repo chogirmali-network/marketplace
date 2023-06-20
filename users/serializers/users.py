@@ -28,7 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.two_step_verification_password = validated_data.get('first_name', instance.two_step_verification_password)
         instance.is_verify_account = validated_data.get('is_verify_account', instance.is_verify_account)
         instance.login_type = validated_data.get('login_type', instance.login_type)
-        instance.updated_at = validated_data.get('updated_at', instance.updated_at)
         instance.save()
         return instance
 

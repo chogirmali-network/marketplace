@@ -14,6 +14,5 @@ class MessageSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.content = validated_data.get('content', instance.content)
         instance.parse_mode = validated_data.get('parse_mode', instance.parse_mode)
-        instance.updated_at = validated_data.get('updated_at', instance.updated_at)
         instance.save()
         return instance
