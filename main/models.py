@@ -45,3 +45,23 @@ class Notification(models.Model):
         db_table = 'notifications'
 
 
+
+class Theme(models.Model):
+    name = models.CharField(max_length=300)
+    link = models.TextField()  # link to theme file as json
+
+
+    def __str__(self) -> str:
+        return f"Theme - {self.name}"
+
+    class Meta:
+        db_table = 'themes'
+
+
+class UserTheme(models.Model):
+    theme = models.ForeignKey(Theme, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+    def __str__(self) -> str:
+        return f"Theme {self.theme.name} for user {self.user.first_name}"

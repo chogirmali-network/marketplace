@@ -14,6 +14,9 @@ class User(models.Model):
     EN = 'en'
     RU = 'ru'
 
+    DARK = 'dark'
+    LIGHT = 'light'
+
     LANGUAGES = (
         (UZ, 'Uz'),
         (EN, 'En'),
@@ -27,8 +30,14 @@ class User(models.Model):
         (EMAIL, 'Email')
     )
 
+    DEFAULT_THEMES = (
+        (DARK, 'Dark'),
+        (LIGHT, 'Light')
+    )
+
     first_name = models.CharField(max_length=2000)
     last_name = models.CharField(max_length=2000, null=True, blank=True)
+    username = models.CharField(max_length=1500, null=True, blank=True)
     email = models.EmailField(unique=True)
     token = models.TextField()
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -41,6 +50,7 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    default_theme = models.CharField(max_length=10, choices=DEFAULT_THEMES, default=LIGHT)
 
 
     def __str__(self) -> str:
