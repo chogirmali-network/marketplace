@@ -7,7 +7,11 @@ from rest_framework.response import Response
 
 from users.serializers.users import UserSerializer
 from users.models import User
+from django.views.generic import TemplateView
 
+
+class Home(TemplateView):
+    template_name = "home.html"
 
 class UserView(views.APIView):
     def get(self, request, user_id=None):

@@ -38,18 +38,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites",
 
     # Third-party packages
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
     'django_seed',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 
     # Our apps
     'company.apps.CompanyConfig',
     'mediafiles.apps.MediafilesConfig',
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
+
+    # social providers
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.twitter",
 ]
 
 # AUTH_USER_MODEL = 'users.User'
@@ -69,7 +77,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,6 +164,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+AUTHENTICATION_BACKENDS = (
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 2
+ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_ON_GET = True
+
 
 # AUTHENTICATION_BACKENDS = [
 #     'social_core.backends.linkedin.LinkedinOAuth2',
