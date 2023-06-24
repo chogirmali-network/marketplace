@@ -49,6 +49,9 @@ class Notification(models.Model):
 class Theme(models.Model):
     name = models.CharField(max_length=300)
     link = models.TextField()  # link to theme file as json
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
 
     def __str__(self) -> str:
@@ -61,6 +64,9 @@ class Theme(models.Model):
 class UserTheme(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
 
     def __str__(self) -> str:

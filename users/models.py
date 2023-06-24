@@ -252,3 +252,35 @@ class Wallet(models.Model):
     class Meta:
         db_table = 'wallets'
 
+
+
+class Device(models.Model):
+    ip_address = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+
+    def __str__(self) -> str:
+        return f"{self.ip_address} device of {self.user.first_name}"
+
+    class Meta:
+        db_table = 'devices'
+
+
+class BannedUser(models.Model):
+    # we should write REVISIONS choices for revision to banning a user
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    revision = models.CharField(max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+
+    def __str__(self) -> str:
+        return f"Banned user {self.user.first_name}"
+
+    class Meta:
+        db_table = 'banned_users'
+
