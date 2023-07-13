@@ -284,3 +284,13 @@ class BannedUser(models.Model):
     class Meta:
         db_table = 'banned_users'
 
+
+class PinnedChat(models.Model):
+    chat_id = models.CharField(max_length=100)
+    user = models.ManyToManyField(User, related_name="pinnedchat")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'pinned_chat'
