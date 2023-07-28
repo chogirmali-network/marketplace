@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from users.models import User, SubscriptionPlan
-
+from users.models import User, SubscriptionPlan, PinnedChat
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -44,3 +43,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_subscription_plan(self, obj):
         return SubscriptionPlan.objects.get(user=obj).plan
+
+
+class PinnedChatserializer(serializers.Serializer):
+    class Meta:
+        model = PinnedChat
+        fields = ["chat_id", "user"]
+        read_only_fields = ("id", "created_at")
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        instance.chat_id = validated_data.get("chat_id", instance.chat_id)
+        instance.user = validated_data.get("user", instance.user)
+        instance.save()
+        return instance
