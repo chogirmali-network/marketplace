@@ -37,11 +37,13 @@ class User(models.Model):
 
     first_name = models.CharField(max_length=2000)
     last_name = models.CharField(max_length=2000, null=True, blank=True)
-    username = models.CharField(max_length=1500, null=True, blank=True)
+    username = models.CharField(max_length=1500, null=True, blank=True, unique=True)
     email = models.EmailField(unique=True)
+    profile_image = models.TextField(null=True, blank=True)
+    cover_image = models.TextField(null=True, blank=True)
     token = models.TextField()
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    language = models.CharField(max_length=5, choices=LANGUAGES, null=True, blank=True)
+    language = models.CharField(max_length=5, choices=LANGUAGES, null=True, blank=True, default=EN)
     referral_code = models.CharField(max_length=20, null=True, blank=True)
     password = models.TextField()
     two_step_verification_password = models.TextField(null=True, blank=True)
@@ -57,7 +59,7 @@ class User(models.Model):
         return f"User - {self.first_name}"
 
     def get_subscription_plan(self):
-        return SubscriptionPlan.objects.get(user=self).plan
+        return self.subscription_plan.plan
 
     def make_verify_account(self):
         if self.is_verify_account == False:
@@ -78,7 +80,7 @@ class SubscriptionPlan(models.Model):
     )
 
     plan = models.CharField(max_length=1000, default=FREE, choices=PLANS)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription_plan')
     upload_projects = models.PositiveBigIntegerField(validators=[MinValueValidator(11), MaxValueValidator(1000)], default=10)
     write_blog = models.PositiveBigIntegerField(validators=[MinValueValidator(21), MaxValueValidator(1000)], default=20)
     join_team = models.PositiveBigIntegerField(validators=[MinValueValidator(11), MaxValueValidator(1000)], default=10)
@@ -95,6 +97,17 @@ class SubscriptionPlan(models.Model):
     class Meta:
         db_table = 'subscription_plans'
 
+
+class ExtraLink(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='extra_links')
+    link = models.TextField()
+
+    def __str__(self) -> str:
+        return f"{self.user.first_name} - {self.link}"
+
+    class Meta:
+        db_table = 'extra_links'
+        unique_together = ('user', 'link')
 
 
 class Project(models.Model):
