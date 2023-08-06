@@ -1,10 +1,13 @@
 import uuid
 
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from users.querysets.user import UserManager
+from django.utils import timezone
 
 
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     GITHUB = 'github'
     LINKEDIN = 'linkedin'
     GOOGLE = 'google'
@@ -45,24 +48,27 @@ class User(models.Model):
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     language = models.CharField(max_length=5, choices=LANGUAGES, null=True, blank=True, default=EN)
     referral_code = models.CharField(max_length=20, null=True, blank=True)
-    password = models.TextField()
     two_step_verification_password = models.TextField(null=True, blank=True)
     is_verify_account = models.BooleanField(default=False)
     login_type = models.CharField(max_length=200, choices=LOGIN_TYPES)
-    created_at = models.DateTimeField(auto_now_add=True)
+    default_theme = models.CharField(max_length=10, choices=DEFAULT_THEMES, default=LIGHT)
+    objects = UserManager()
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    default_theme = models.CharField(max_length=10, choices=DEFAULT_THEMES, default=LIGHT)
-
 
     def __str__(self) -> str:
-        return f"User - {self.first_name}"
+        return self.email
 
     def get_subscription_plan(self):
         return self.subscription_plan.plan
 
     def make_verify_account(self):
-        if self.is_verify_account == False:
+        if not self.is_verify_account:
             self.is_verify_account = True
             self.save()
 
@@ -92,7 +98,7 @@ class SubscriptionPlan(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return f"Subscription - {self.user.first_name} to {self.plan.title()} for {self.price_monthly if self.price_monthly else '0'} $"
+        return self.plan
 
     class Meta:
         db_table = 'subscription_plans'
@@ -127,17 +133,15 @@ class Project(models.Model):
         db_table = 'projects'
 
 
-
 class Client(models.Model):
-    employee = models.ForeignKey(User, on_delete=models.PROTECT, related_name='client')
-    client = models.ForeignKey(User, on_delete=models.PROTECT, related_name='employee')
+    employee = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_client')
+    client = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_employee')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self) -> str:
-        return f'Client {self.client.first_name} to {self.employee.first_name}'
+        return self.client.first_name
 
     class Meta:
         db_table = 'clients'
@@ -151,9 +155,8 @@ class Team(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self):
-        return f'Team - {self.name}'
+        return self.name
 
     class Meta:
         db_table = 'teams'
@@ -166,9 +169,8 @@ class Member(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self) -> str:
-        return f'Member {self.user.first_name} of team {self.team.name}'
+        return self.team.name
 
     class Meta:
         db_table = 'members'
@@ -181,9 +183,8 @@ class TeamBadge(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self) -> str:
-        return f'Badge {self.badge.logo.url} of team {self.team.name}'
+        return self.badge.logo.url
 
     class Meta:
         db_table = 'team_badges'

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from users.models import User
 
 
 class Company(models.Model):
@@ -16,9 +16,8 @@ class Company(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self) -> str:
-        return f"Company - {self.name}"
+        return self.name
 
     class Meta:
         db_table = 'companies'
@@ -34,9 +33,8 @@ class Employee(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-
     def __str__(self) -> str:
-        return f"Employee of {self.company.name}"
+        return self.company.name
 
     class Meta:
         db_table = 'employees'
@@ -47,7 +45,6 @@ class CompanyField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
 
     def __str__(self) -> str:
         return self.name

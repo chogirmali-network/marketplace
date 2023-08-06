@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import configurations
+import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     # Third-party packages
     'rest_framework',
     'rest_framework_swagger',
+    'rest_framework_simplejwt',
     'drf_yasg',
     'django_seed',
     "allauth",
@@ -60,7 +62,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.twitter",
 ]
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -166,25 +168,37 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+# JWT_AUTH = {
+#     'JWT_VERIFY': True,
+#     'JWT_VERIFY_EXPIRATION': True,
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+#     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+# }
+
 AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
+    # 'social_core.backends.linkedin.LinkedinOAuth2',
 )
 
 SITE_ID = 2
 ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_ON_GET = True
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
 
-
-# AUTHENTICATION_BACKENDS = [
-#     'social_core.backends.linkedin.LinkedinOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# ]
-
-# LOGIN_URL = 'login'
-# LOGIN_REDIRECT_URL = 'home'
-# LOGOUT_URL = 'logout'
-# LOGOUT_REDIRECT_URL = 'login'
-
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'

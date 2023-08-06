@@ -8,7 +8,6 @@ alphabet = [
 digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
 
-
 def generate_referral_code(old_referrals):
     while True:
         new_referral_code = ''.join(
