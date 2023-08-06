@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import configurations
-import datetime
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,8 +43,8 @@ INSTALLED_APPS = [
 
     # Third-party packages
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_swagger',
-    'rest_framework_simplejwt',
     'drf_yasg',
     'django_seed',
     "allauth",
@@ -80,7 +80,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -111,8 +112,6 @@ DATABASES = {
         'PORT': configurations.DB_PORT,
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -173,9 +172,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        'users.utils.authentication.CustomTokenAuthentication',
     ),
 }
 
@@ -194,11 +191,11 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 2
 ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "admin"
 ACCOUNT_LOGOUT_ON_GET = True
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'account_login'
+LOGOUT_URL = 'account_logout'
+LOGOUT_REDIRECT_URL = 'account_login'
 
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'

@@ -5,7 +5,7 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view as drf_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from allauth import templates
 
 
 schema_view = drf_schema_view(
@@ -17,18 +17,16 @@ schema_view = drf_schema_view(
         contact=openapi.Contact(email='chogirmali.yigit@gmail.com')
     ),
     public=True,
-    permission_classes=(AllowAny, )
+    permission_classes=[AllowAny]
 )
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-doc'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-doc'),
     path("accounts/", include("allauth.urls")),
     path('api/v1/', include([
-        path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
         path('users/', include(('users.urls', 'users'), namespace='users')),
         path('company/', include(('company.urls', 'company'), namespace='company')),
         path('mediafiles/', include(('mediafiles.urls', 'mediafiles'), namespace='mediafiles')),

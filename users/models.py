@@ -44,7 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     profile_image = models.TextField(null=True, blank=True)
     cover_image = models.TextField(null=True, blank=True)
-    token = models.TextField()
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     language = models.CharField(max_length=5, choices=LANGUAGES, null=True, blank=True, default=EN)
     referral_code = models.CharField(max_length=20, null=True, blank=True)

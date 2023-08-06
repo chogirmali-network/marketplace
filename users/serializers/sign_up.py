@@ -5,7 +5,7 @@ from users.models import User, SubscriptionPlan
 class SignUpSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['login_type'] = User.EMAIL
-        user = User.objects.create(**validated_data)
+        user = User.objects.create_user(**validated_data)
         SubscriptionPlan.objects.create(user=user, price_monthly=0)
         return user
 

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from users.serializers.sign_in import SignInSerializer
-from users.utils.auth_token import get_tokens_for_user
+from users.utils.token import sign_in_response
 
 
 class SignInView(APIView):
@@ -14,4 +14,4 @@ class SignInView(APIView):
         serializer = SignInSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        return Response(get_tokens_for_user(user), status=status.HTTP_200_OK)
+        return Response(sign_in_response(user), status=status.HTTP_200_OK)
