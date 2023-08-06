@@ -5,7 +5,6 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view as drf_schema_view
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
-from allauth import templates
 
 
 schema_view = drf_schema_view(
