@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from users.serializers.sign_up import SignUpSerializer
 from users.models import User, Referral
+from serializers.referral import ReferalSerializer
 
 class SignUpView(APIView):
     permission_classes = (AllowAny, )
@@ -19,7 +20,7 @@ class SignUpView(APIView):
                         'referral_code': f"{referral}"
                     }
                 
-                    serializer = Referral(data=data)
+                    serializer = ReferalSerializer(data=data)
                     if serializer.is_valid():
                         serializer.save()
                         return Response(serializer.data, status=status.HTTP_201_CREATED)
