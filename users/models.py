@@ -307,3 +307,15 @@ class PinnedChat(models.Model):
 
     class Meta:
         db_table = 'pinned_chat'
+
+
+class Referral(models.Model):
+    invited_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    logged_in_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    referral_code = models.CharField(max_length=20, null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    approve= models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username}- {self.invited_user }'
