@@ -21,7 +21,7 @@ schema_view = drf_schema_view(
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
+    path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-doc'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-doc'),
     path("accounts/", include("allauth.urls")),

@@ -52,14 +52,15 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
 
     # Our apps
-    'company.apps.CompanyConfig',
-    'mediafiles.apps.MediafilesConfig',
-    'users.apps.UsersConfig',
-    'main.apps.MainConfig',
+    'company',
+    'core',
+    'main',
+    'mediafiles',
+    'users',
 
     # social providers
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.twitter",
+    'allauth.socialaccount.providers.github',
+    # "allauth.socialaccount.providers.twitter",
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -176,22 +177,14 @@ REST_FRAMEWORK = {
     ),
 }
 
-# JWT_AUTH = {
-#     'JWT_VERIFY': True,
-#     'JWT_VERIFY_EXPIRATION': True,
-#     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
-#     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-# }
-
 AUTHENTICATION_BACKENDS = (
-    "allauth.account.auth_backends.AuthenticationBackend",
     'django.contrib.auth.backends.ModelBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
     # 'social_core.backends.linkedin.LinkedinOAuth2',
 )
-
 SITE_ID = 2
 ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_REDIRECT_URL = "admin"
+LOGIN_REDIRECT_URL = "swagger-doc"
 ACCOUNT_LOGOUT_ON_GET = True
 LOGIN_URL = 'account_login'
 LOGOUT_URL = 'account_logout'
@@ -199,3 +192,16 @@ LOGOUT_REDIRECT_URL = 'account_login'
 
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': 'd001c08e2cf5f2e33e3f',
+            'secret': '04949fca6757389c487efb46741c13111cde9fc5',
+            'key': ''
+        }
+    }
+}

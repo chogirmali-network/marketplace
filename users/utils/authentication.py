@@ -10,6 +10,7 @@ class CustomTokenAuthentication(TokenAuthentication):
         token = Token.objects.filter(key=key, created__gte=timezone.now() - timezone.timedelta(days=1)).first()
 
         if token is None:
+            Token.objects.filter(key=key).delete()
             raise AuthenticationFailed({'detail': _('Invalid or expired token.'), 'logout': 'true'})
 
         if not token.user.is_active:

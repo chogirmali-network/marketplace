@@ -1,22 +1,25 @@
 from django.db import models
+
 from users.models import User
+
+from core.models import S3Attachment
 
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
-    logo = models.ImageField(upload_to='company_logoes/')
+    logo = models.ForeignKey(S3Attachment, on_delete=models.PROTECT, null=True, blank=True)
     field = models.ForeignKey('company.CompanyField', on_delete=models.CASCADE)
     address = models.TextField(null=True, blank=True)
     latitude = models.BigIntegerField(null=True, blank=True)
     longitude = models.BigIntegerField(null=True, blank=True)
     phone_number = models.CharField(max_length=500)
-    ceo = models.OneToOneField(User, on_delete=models.PROTECT)
+    ceo = models.ForeignKey(User, on_delete=models.PROTECT, related_name='companies')
     info = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -25,8 +28,8 @@ class Company(models.Model):
 
 
 class Employee(models.Model):
-    company = models.ManyToManyField(Company)
-    user = models.ManyToManyField(User)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     work_started_at = models.DateTimeField(null=True, blank=True)
     work_ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,13 +44,13 @@ class Employee(models.Model):
 
 
 class CompanyField(models.Model):
-    name = models.CharField(max_length=1000)
+    title = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.name
+    def __str__(self):
+        return self.title
 
     class Meta:
         db_table = 'company_fields'

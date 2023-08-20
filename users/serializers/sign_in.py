@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
+
+from users.models import User
 
 
 class SignInSerializer(serializers.Serializer):
@@ -7,11 +8,10 @@ class SignInSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, trim_whitespace=False)
 
     def validate(self, attrs):
-        user = authenticate(
-            request=self.context.get('request'),
+        user = User.objects.filter(
             email=attrs.get('email'),
             password=attrs.get('password')
-        )
+        ).first()
 
         if not user:
             raise serializers.ValidationError({'password': "Wrong password or email"})

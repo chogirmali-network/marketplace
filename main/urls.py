@@ -1,9 +1,9 @@
 from django.urls import path
-from main.views import MessageView
+from main.views import MessageView, NotificationView, UserThemeView
 
 
 urlpatterns = [
-    path('messages', MessageView.as_view(), name='messages'),
-    path('message/<int:message_id>', MessageView.as_view(), name='message-detail'),
+    path('message', MessageView.as_view(), name='message'),
+    path('notification', NotificationView.as_view(), name='notification'),
+    path('user-theme', UserThemeView.as_view(), name='user-theme'),
 ]
-
