@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from rest_framework.views import APIView
@@ -16,6 +15,12 @@ class MessageView(APIView):
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
+    def put(self, request):
+        serializer = MessageSerializer(request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+
 
 class NotificationView(APIView):
     def post(self, request):
@@ -24,8 +29,19 @@ class NotificationView(APIView):
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
+    def put(self, request):
+        serializer = NotificationSerializer(request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+
 
 class UserThemeView(APIView):
+    def get(self, request):
+        themes = UserTheme.objects.filter(user=request.user)
+        serializer = UserThemeSerializer(themes, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
+
     def post(self, request):
         serializer = UserThemeSerializer(request.data)
         serializer.is_valid(raise_exception=True)
