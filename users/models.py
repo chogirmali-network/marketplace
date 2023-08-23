@@ -16,9 +16,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     DARK = 'dark'
     LIGHT = 'light'
 
+    DEVELOPER = 'developer'
+    CUSTOMER = 'customer'
+    COMPANY_REPRESENTATIVE = 'company_representative'
+
     DEFAULT_THEMES = (
         (DARK, 'Dark'),
         (LIGHT, 'Light')
+    )
+
+    USER_ROLES = (
+        (DEVELOPER, 'Developer'),
+        (CUSTOMER, 'Customer'),
+        (COMPANY_REPRESENTATIVE, 'Company representative')
     )
 
     first_name = models.CharField(max_length=2000)
@@ -35,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_verify_account = models.BooleanField(default=False)
     login_type = models.CharField(max_length=200, choices=LOGIN_TYPES)
     default_theme = models.CharField(max_length=10, choices=DEFAULT_THEMES, default=LIGHT)
+    role = models.CharField(max_length=100, choices=USER_ROLES)
 
     objects = UserManager()
     USERNAME_FIELD = "email"
