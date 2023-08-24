@@ -41,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     language = models.CharField(max_length=5, choices=SUPPORTED_LANGUAGES, null=True, blank=True)
     referral_code = models.CharField(max_length=20, unique=True)
+    invited_code = models.CharField(max_length=20, null=True, blank=True)
     two_step_verification_password = models.TextField(null=True, blank=True)
     is_verify_account = models.BooleanField(default=False)
     login_type = models.CharField(max_length=200, choices=LOGIN_TYPES)
@@ -48,8 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=100, choices=USER_ROLES)
 
     objects = UserManager()
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ['email']
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
