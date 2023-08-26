@@ -1,0 +1,16 @@
+.idea
+.venv
+*.pyc
+/static
+media
+.DS_Store
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tags
+pytest.ini
+data
+.env
+vandelay-py.js
+.envrc
+/htmlcov
+.env.example
