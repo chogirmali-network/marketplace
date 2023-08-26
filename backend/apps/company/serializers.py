@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.apps.company.models import Company, Employee
+from company.models import Company, Employee
 
 
 class AddCompanySerializer(serializers.ModelSerializer):

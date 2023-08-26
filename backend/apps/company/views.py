@@ -2,9 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.utils import timezone
-from .serializers import AddCompanySerializer, AddEmployeeSerializer
-from .models import Company, Employee
+
+from company.serializers import AddCompanySerializer, AddEmployeeSerializer
 
 
 class AddCompanyView(APIView):

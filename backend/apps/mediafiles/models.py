@@ -2,9 +2,9 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 
-from backend.apps.users.models import User
+from users.models import User
 
-from backend.apps.core.models import S3Attachment
+from core.models import S3Attachment
 
 
 class Image(models.Model):

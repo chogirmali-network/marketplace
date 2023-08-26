@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
-from backend.apps.users.serializers.users import Referral, User
-from backend.apps.users.serializers.users import SignUpSerializer
+from users.models import Referral, User
+from users.serializers.sign_up import SignUpSerializer
 
 
 class ReferralSerializer(serializers.ModelSerializer):

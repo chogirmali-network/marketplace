@@ -9,8 +9,8 @@ media
 .vscode/tags
 pytest.ini
 data
-.env
+config/.env
 vandelay-py.js
 .envrc
 /htmlcov
-.env.example
+config/.env.example

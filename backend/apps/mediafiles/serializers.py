@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.apps.mediafiles.models import Video, Category
+from mediafiles.models import Video, Category
 
 
 class VideoSerializer(serializers.ModelSerializer):

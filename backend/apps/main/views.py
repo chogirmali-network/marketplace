@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from backend.apps.main.models import UserTheme
-from backend.apps.main.serializers import MessageSerializer, NotificationSerializer, UserThemeSerializer
+from main.models import UserTheme
+from main.serializers import MessageSerializer, NotificationSerializer, UserThemeSerializer
 
 
 class MessageView(APIView):

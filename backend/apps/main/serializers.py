@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.apps.main.models import Message, Notification, UserTheme
+from main.models import Message, Notification, UserTheme
 
 
 class MessageSerializer(serializers.ModelSerializer):

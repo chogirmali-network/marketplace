@@ -5,11 +5,11 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
-from backend.apps.users.querysets.user import UserManager
+from users.querysets.user import UserManager
 
-from backend.apps.core.models import S3Attachment
-from backend.apps.core.utils.langs import SUPPORTED_LANGUAGES
-from backend.apps.core.utils.login_types import LOGIN_TYPES
+from core.models import S3Attachment
+from core.utils.langs import SUPPORTED_LANGUAGES
+from core.utils.login_types import LOGIN_TYPES
 
 
 class User(AbstractBaseUser, PermissionsMixin):

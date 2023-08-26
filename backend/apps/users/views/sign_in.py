@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from backend.apps.users.views.users import SignInSerializer
-from backend.apps.users.utils.token import sign_in_response
+from users.serializers.sign_in import SignInSerializer
+from users.utils.token import sign_in_response
 
 
 class SignInView(APIView):

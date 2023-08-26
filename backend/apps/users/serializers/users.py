@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.apps.users.serializers.users import User, SubscriptionPlan, PinnedChat
+from users.models import User, SubscriptionPlan, PinnedChat
 
 
 class UserSerializer(serializers.ModelSerializer):

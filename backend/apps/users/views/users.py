@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from backend.apps.users.views.users import UserSerializer, PinnedChatSerializer
-from backend.apps.users.views.users import PinnedChat
+from users.serializers.users import UserSerializer, PinnedChatSerializer
+from users.models import PinnedChat
 
 
 class UserDetailView(APIView):

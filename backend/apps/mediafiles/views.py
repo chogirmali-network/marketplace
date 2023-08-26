@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from backend.apps.mediafiles.models import Video
-from backend.apps.mediafiles.serializers import VideoSerializer
+from mediafiles.models import Video
+from mediafiles.serializers import VideoSerializer
 
 
 class VideoView(APIView):

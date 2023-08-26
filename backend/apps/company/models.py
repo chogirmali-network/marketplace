@@ -1,8 +1,8 @@
 from django.db import models
 
-from backend.apps.users.models import User
+from users.models import User
 
-from backend.apps.core.models import S3Attachment
+from core.models import S3Attachment
 
 
 class Company(models.Model):
