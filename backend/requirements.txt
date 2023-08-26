@@ -39,3 +39,5 @@ black==23.7.0
 isort==5.12.0
 social-auth-core
 django-allauth
+django-crispy-forms
+crispy-bootstrap5
