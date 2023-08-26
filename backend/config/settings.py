@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'django_seed',
+    'crispy_forms',
+    'crispy_bootstrap5',
 
     # Django-allauth
     "allauth",
@@ -90,7 +92,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'apps/templates'),
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -201,27 +203,28 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     "allauth.account.auth_backends.AuthenticationBackend",
-    # 'social_core.backends.linkedin.LinkedinOAuth2',
 )
 
-SITE_ID = 2
-ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_REDIRECT_URL = "swagger-doc"
-ACCOUNT_LOGOUT_ON_GET = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SITE_ID = 3
+
+LOGIN_REDIRECT_URL = "home"
+SIGNUP_URL = 'account_signup'
 LOGIN_URL = 'account_login'
 LOGOUT_URL = 'account_logout'
 LOGOUT_REDIRECT_URL = 'account_login'
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '77lszax4g6c60i'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'IzHba5UzNHdVFiuT'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_SESSION_REMEMBER = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'APP': {
-            'client_id': 'd001c08e2cf5f2e33e3f',
-            'secret': '04949fca6757389c487efb46741c13111cde9fc5',
-            'key': ''
-        }
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
     }
 }
 

@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     cover_image = models.ForeignKey(S3Attachment, on_delete=models.PROTECT, null=True, blank=True, related_name='cover_images')
     confirmation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     language = models.CharField(max_length=5, choices=SUPPORTED_LANGUAGES, null=True, blank=True)
-    referral_code = models.CharField(max_length=20, unique=True)
+    referral_code = models.CharField(max_length=20, null=True, blank=True)
     invited_code = models.CharField(max_length=20, null=True, blank=True)
     two_step_verification_password = models.TextField(null=True, blank=True)
     is_verify_account = models.BooleanField(default=False)
@@ -49,8 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=100, choices=USER_ROLES)
 
     objects = UserManager()
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -131,6 +131,7 @@ class Project(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)    
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ForeignKey(S3Attachment, on_delete=models.PROTECT, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -142,14 +143,34 @@ class Project(models.Model):
         db_table = 'projects'
 
 
-class Client(models.Model):
-    employee = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_clients')
-    client = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user_employees')
+class ProjectData(models.Model):
+    GITHUB = 'github'
+
+    PROVIDERS = (
+        (GITHUB, 'Github'),
+    )
+    provider = models.CharField(max_length=100, choices=PROVIDERS, default=GITHUB)
+    project = models.ForeignKey(Project, models.CASCADE, 'data')
+    data = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self) -> str:
+    def __str__(self):
+        return f'{self.provider} - {self.project.name}'
+
+    class Meta:
+        db_table = 'project_datas'
+
+
+class Client(models.Model):
+    employee = models.ForeignKey(User, on_delete=models.PROTECT, related_name='clients')
+    client = models.ForeignKey(User, on_delete=models.PROTECT, related_name='employees')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
         return self.client.first_name
 
     class Meta:
