@@ -12,7 +12,6 @@ djangorestframework-simplejwt
 djangorestframework-jwt==1.11.0
 drf-yasg==1.21.5
 environs==9.5.0
-environ
 Faker==18.10.1
 idna==3.4
 inflection==0.5.1
