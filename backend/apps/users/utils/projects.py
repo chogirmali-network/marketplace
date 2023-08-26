@@ -31,4 +31,3 @@ def add_projects_via_github(data, repo_ids: list = None):
                 )
             )
         ProjectData.objects.bulk_create(projects_data)
-

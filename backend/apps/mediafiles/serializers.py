@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from backend.apps.mediafiles.models import Video, Category
 
 
@@ -37,4 +38,3 @@ class VideoCategorySerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.save()
         return instance
-

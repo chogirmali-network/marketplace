@@ -9,7 +9,6 @@ from backend.apps.mediafiles.models import Video
 from backend.apps.mediafiles.serializers import VideoSerializer
 
 
-
 class VideoView(APIView):
     def get(self, request, video_id=None):
         if video_id:
@@ -38,5 +37,3 @@ class VideoView(APIView):
         video.deleted_at = timezone.now()
         video.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
-
-

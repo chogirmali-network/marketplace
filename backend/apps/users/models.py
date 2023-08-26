@@ -127,8 +127,8 @@ class Referral(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=1000)
-    description = models.TextField(null=True, blank=True)    
-    price = models.DecimalField(max_digits=10, decimal_places=2)    
+    description = models.TextField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ForeignKey(S3Attachment, on_delete=models.PROTECT, null=True, blank=True)
     is_active = models.BooleanField(default=True)
