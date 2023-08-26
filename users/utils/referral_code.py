@@ -8,9 +8,11 @@ alphabet = [
 digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
 
-def generate_referral_code():
-    new_referral_code = ''.join(
-        random.choice(alphabet + [letter.upper() for letter in alphabet] + digits)
-        for i in range(8)
-    )
-    return new_referral_code
+def generate_referral_code(referrals):
+    while True:
+        new_referral_code = ''.join(
+            random.choice(alphabet + [letter.upper() for letter in alphabet] + digits)
+            for i in range(8)
+        )
+        if new_referral_code not in referrals:
+            return new_referral_code
