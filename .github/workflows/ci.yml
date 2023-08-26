@@ -25,7 +25,7 @@ jobs:
       - name: Install pycodestyle
         run: pip install pycodestyle==2.5.0
       - name: Lint backend
-        run: pycodestyle marketplace --ignore=E501,W504 --exclude=migrations
+        run: pycodestyle backend --ignore=E501,W504 --exclude=migrations
 
   backend-test:
     runs-on: ubuntu-latest
@@ -46,9 +46,9 @@ jobs:
         with:
           python-version: 3.11.4
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r backend/requirements.txt
       - name: Django Testing project
-        run: python3 manage.py test
+        run: cd backend && python3 manage.py test
   # https://github.com/mathieudutour/github-tag-action#bumping
   # https://github.com/semantic-release/semantic-release
   tag:
@@ -106,7 +106,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             export DJANGO_SETTINGS_MODULE=config.settings;
-            cd marketplace;
+            cd marketplace/backend;
             git config user.name "$(git log -n 1 --pretty=format:%an)"
             git config user.email "$(git log -n 1 --pretty=format:%ae)"
             git checkout ${{ github.ref_name }}
