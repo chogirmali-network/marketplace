@@ -40,7 +40,6 @@ ALLOWED_HOSTS = [
     'backend',
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.sites",
+
+    # Storage
 
     # Third-party packages
     'rest_framework',
@@ -111,10 +112,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -144,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -176,7 +174,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -185,7 +182,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -228,12 +224,21 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
+AWS_S3_SESSION_PROFILE = ''
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = ''
 AWS_DEFAULT_REGION = 'us-east-1'
 
+STORAGES = {
+    "default": {
+        "BACKEND": "core.aws.storage.MediaStorage"
+        # "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage"
+    }
+}
 
 try:
     from .settings_dev import *

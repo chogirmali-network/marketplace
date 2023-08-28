@@ -13,4 +13,3 @@ config/.env
 vandelay-py.js
 .envrc
 /htmlcov
-config/.env.example
