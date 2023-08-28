@@ -1,9 +1,9 @@
 from django.urls import path, include
-from backend.apps.users.views.users import UserDetailView, PinnedChatView
-from backend.apps.users.views.sign_up import SignUpView
-from backend.apps.users.views.sign_in import SignInView
-from backend.apps.users.views.sign_out import SignOutView
-from backend.apps.users.views.referrals import SignUpWithReferralView
+from users.views.users import UserDetailView, PinnedChatView
+from users.views.sign_up import SignUpView
+from users.views.sign_in import SignInView
+from users.views.sign_out import SignOutView
+from users.views.referrals import SignUpWithReferralView
 
 
 urlpatterns = [

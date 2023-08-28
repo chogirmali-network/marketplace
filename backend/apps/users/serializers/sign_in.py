@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.apps.users.serializers.users import User
+from users.serializers.users import User
 
 
 class SignInSerializer(serializers.Serializer):

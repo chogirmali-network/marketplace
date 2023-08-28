@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from backend.apps.users.serializers.users import User, SubscriptionPlan
-from backend.apps.users.utils.referral_code import generate_referral_code
+from users.serializers.users import User, SubscriptionPlan
+from users.utils.referral_code import generate_referral_code
 
-from backend.apps.core.utils.login_types import EMAIL
+from core.utils.login_types import EMAIL
 
 
 class SignUpSerializer(serializers.ModelSerializer):

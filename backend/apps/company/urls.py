@@ -1,5 +1,5 @@
 from django.urls import path
-from backend.apps.company.views import AddCompanyView, AddEmployeeView
+from company.views import AddCompanyView, AddEmployeeView
 
 
 urlpatterns = [

@@ -1,5 +1,5 @@
 from django.urls import path
-from backend.apps.main.views import MessageView, NotificationView, UserThemeView
+from main.views import MessageView, NotificationView, UserThemeView
 
 
 urlpatterns = [

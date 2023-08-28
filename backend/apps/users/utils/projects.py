@@ -1,5 +1,5 @@
-from backend.apps.users.models import Project, ProjectData
-from backend.apps.users.utils.users import get_user_by_github_login
+from users.models import Project, ProjectData
+from users.utils.users import get_user_by_github_login
 
 
 def add_projects_via_github(data, repo_ids: list = None):

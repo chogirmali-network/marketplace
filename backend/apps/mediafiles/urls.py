@@ -1,5 +1,5 @@
 from django.urls import path
-from backend.apps.mediafiles.views import VideoView
+from mediafiles.views import VideoView
 
 
 urlpatterns = [
