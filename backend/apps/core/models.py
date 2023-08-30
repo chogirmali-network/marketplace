@@ -14,3 +14,21 @@ class S3Attachment(models.Model):
 
     class Meta:
         db_table = 's3_attachments'
+
+class Service(models.Model):
+    title = models.CharField(max_length=250)
+    services = models.CharField(max_length=100)
+    code = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    attachment = models.ForeignKey(S3Attachment, on_delete=models.CASCADE)
+    description = models.CharField(max_length=150, null=True, blank=True)
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        db_table = 'service'

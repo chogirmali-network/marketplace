@@ -11,6 +11,7 @@ from core.models import S3Attachment
 from core.utils.langs import SUPPORTED_LANGUAGES
 from core.utils.login_types import LOGIN_TYPES
 
+from core.models import Service
 
 class User(AbstractBaseUser, PermissionsMixin):
     DARK = 'dark'
@@ -330,3 +331,16 @@ class PinnedChat(models.Model):
 
     class Meta:
         db_table = 'pinned_chats'
+
+class UserService(models.Model):
+    user = models.ForeignKey(Service, on_delete=models.CASCADE)
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.user
+    
+    class Meta:
+        db_table = 'user_service'
