@@ -2,10 +2,28 @@ from django.db import models
 
 from users.models import User
 
-from core.models import S3Attachment
+from core.models import BaseModel
 
 
-class Message(models.Model):
+class Chat(BaseModel):
+    GROUP = 'group'
+    PRIVATE = 'private'
+
+    TYPES = (
+        (GROUP, 'Group'),
+        (PRIVATE, 'Private'),
+    )
+    title = models.CharField(max_length=500, null=True, blank=True)
+    type = models.CharField(max_length=20, choices=TYPES)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = 'chats'
+
+
+class Message(BaseModel):
     HTML = 'html'
     MARKDOWN = 'markdown'
 
@@ -15,35 +33,26 @@ class Message(models.Model):
     )
 
     content = models.TextField()
-    chat_id = models.TextField()
+    chat = models.ForeignKey('main.Chat', models.CASCADE, 'messages')
     parse_mode = models.CharField(max_length=20, choices=PARSE_MODES, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'messages'
 
 
-class Notification(models.Model):
-    chat_id = models.TextField()
+class Notification(BaseModel):
+    chat = models.ForeignKey('main.Chat', models.CASCADE, 'notifications')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     is_view = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'notifications'
 
 
-class Theme(models.Model):
+class Theme(BaseModel):
     name = models.CharField(max_length=300)
-    link = models.ForeignKey(S3Attachment, on_delete=models.PROTECT)  # link to theme file as json
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    link = models.ForeignKey('core.TelegramStorage', on_delete=models.PROTECT)  # link to theme file as json
 
     def __str__(self):
         return self.name
@@ -52,12 +61,9 @@ class Theme(models.Model):
         db_table = 'themes'
 
 
-class UserTheme(models.Model):
+class UserTheme(BaseModel):
     theme = models.ForeignKey(Theme, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.theme.name
