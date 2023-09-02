@@ -53,7 +53,7 @@ class TelegramStorage(BaseModel):
     width = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
     thumbnail = models.ForeignKey(
-        'self', models.SET_NULL, 'thumbnail', null=True, blank=True
+        'self', models.SET_NULL, 'thumbnails', null=True, blank=True
     )
     duration = models.PositiveIntegerField(null=True, blank=True)
     performer = models.CharField(max_length=500, null=True, blank=True)
