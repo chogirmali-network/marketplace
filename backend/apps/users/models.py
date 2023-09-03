@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from users.querysets.user import UserManager
 
-from core.models import S3Attachment
+from core.models import BaseModel, S3Attachment
 from core.utils.langs import SUPPORTED_LANGUAGES
 from core.utils.login_types import LOGIN_TYPES
 
@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = "users"
 
 
-class SubscriptionPlan(models.Model):
+class SubscriptionPlan(BaseModel):
     FREE = 'free'
     CUSTOM = 'custom'
 
@@ -84,9 +84,6 @@ class SubscriptionPlan(models.Model):
     themes = models.PositiveBigIntegerField(validators=[MinValueValidator(3), MaxValueValidator(1000)], default=2)
     price_monthly = models.DecimalField(max_digits=20, decimal_places=2)
     expires_in = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.user.email + ' - ' + self.plan
@@ -95,7 +92,7 @@ class SubscriptionPlan(models.Model):
         db_table = 'subscription_plans'
 
 
-class ExtraLink(models.Model):
+class ExtraLink(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='extra_links')
     link = models.TextField()
 
@@ -107,12 +104,9 @@ class ExtraLink(models.Model):
         unique_together = ('user', 'link')
 
 
-class Referral(models.Model):
+class Referral(BaseModel):
     invited_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='referrals')
     logged_in_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invited_referrals')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.invited_user.email + ' - ' + self.logged_in_user.email
@@ -125,16 +119,13 @@ class Referral(models.Model):
         db_table = 'referrals'
 
 
-class Project(models.Model):
+class Project(BaseModel):
     name = models.CharField(max_length=1000)
     description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ForeignKey(S3Attachment, on_delete=models.PROTECT, null=True, blank=True)
+    image = models.ForeignKey('core.TelegramStorage', on_delete=models.PROTECT, null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -143,7 +134,7 @@ class Project(models.Model):
         db_table = 'projects'
 
 
-class ProjectData(models.Model):
+class ProjectData(BaseModel):
     GITHUB = 'github'
 
     PROVIDERS = (
@@ -152,9 +143,6 @@ class ProjectData(models.Model):
     provider = models.CharField(max_length=100, choices=PROVIDERS, default=GITHUB)
     project = models.ForeignKey(Project, models.CASCADE, 'data')
     data = models.JSONField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.provider} - {self.project.name}'
@@ -163,12 +151,9 @@ class ProjectData(models.Model):
         db_table = 'project_datas'
 
 
-class Client(models.Model):
+class Client(BaseModel):
     employee = models.ForeignKey(User, on_delete=models.PROTECT, related_name='clients')
     client = models.ForeignKey(User, on_delete=models.PROTECT, related_name='employees')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.client.first_name
@@ -177,13 +162,11 @@ class Client(models.Model):
         db_table = 'clients'
 
 
-class Team(models.Model):
+class Team(BaseModel):
     name = models.CharField(max_length=1000)
     description = models.TextField(null=True, blank=True)
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    logo = models.ForeignKey('core.TelegramStorage', models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -192,54 +175,42 @@ class Team(models.Model):
         db_table = 'teams'
 
 
-class TeamMember(models.Model):
+class TeamMember(BaseModel):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.team.name
+    def __str__(self):
+        return self.team.name + ' - ' + self.user.first_name
 
     class Meta:
         db_table = 'team_members'
 
 
-class TeamBadge(models.Model):
+class TeamBadge(BaseModel):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     badge = models.ForeignKey('mediafiles.Badge', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.badge.logo.url
+        return self.badge.badge.url
 
     class Meta:
         db_table = 'team_badges'
 
 
-class UserBadge(models.Model):
+class UserBadge(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     badge = models.ForeignKey('mediafiles.Badge', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return f'Badge {self.badge.logo.url} of user {self.user.first_name}'
+        return f'Badge {self.badge.badge.url} of user {self.user.first_name}'
 
     class Meta:
         db_table = 'user_badges'
 
 
-class SavedProject(models.Model):
+class SavedProject(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} - {self.project.name}"
@@ -248,13 +219,10 @@ class SavedProject(models.Model):
         db_table = 'saved_projects'
 
 
-class RankingProject(models.Model):
+class RankingProject(BaseModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     stars = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'User {self.user.first_name} ranked to project {self.project.name} with {self.stars} star(s)'
@@ -263,12 +231,9 @@ class RankingProject(models.Model):
         db_table = 'ranking_projects'
 
 
-class SoldProject(models.Model):
+class SoldProject(BaseModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f'User {self.user.first_name} bought a project {self.project.name}'
@@ -277,13 +242,10 @@ class SoldProject(models.Model):
         db_table = 'sold_projects'
 
 
-class Wallet(models.Model):
+class Wallet(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(0)])
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f'Wallet of {self.user.email}'
@@ -292,12 +254,9 @@ class Wallet(models.Model):
         db_table = 'wallets'
 
 
-class Device(models.Model):
+class Device(BaseModel):
     ip_address = models.CharField(max_length=150)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.ip_address} device of {self.user.first_name}"
@@ -306,13 +265,10 @@ class Device(models.Model):
         db_table = 'devices'
 
 
-class BannedUser(models.Model):
+class BannedUser(BaseModel):
     # we should write REVISIONS choices for revision to banning a user
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     revision = models.CharField(max_length=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f"Banned user {self.user.first_name}"
@@ -321,12 +277,36 @@ class BannedUser(models.Model):
         db_table = 'banned_users'
 
 
-class PinnedChat(models.Model):
-    chat_id = models.CharField(max_length=100)
+class PinnedChat(BaseModel):
+    chat = models.ForeignKey('main.Chat', models.CASCADE, 'pinned')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="pinned_chat")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'pinned_chats'
+
+
+class Service(BaseModel):
+    title = models.CharField(max_length=250)
+    code = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    attachment = models.ForeignKey(S3Attachment, on_delete=models.CASCADE)
+    description = models.CharField(max_length=150, null=True, blank=True)
+    is_active = models.BooleanField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = 'services'
+
+
+class UserService(BaseModel):
+    service = models.ForeignKey(Service, models.CASCADE, 'user_services')
+    user = models.ForeignKey(User, models.CASCADE, 'services')
+    is_active = models.BooleanField()
+
+    def __str__(self):
+        return self.user
+
+    class Meta:
+        db_table = 'user_services'
