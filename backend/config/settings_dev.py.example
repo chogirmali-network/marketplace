@@ -1,3 +1,6 @@
+# Create a new settings_dev.py file and configure settings below for you. Don't delete this file!!!
+# If you want to use postgresql, just delete DATABASES variable.
+
 import os
 
 from .settings import BASE_DIR
@@ -9,3 +12,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
+
+DEBUG = True
+TESTING = True

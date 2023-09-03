@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import User, SubscriptionPlan, Project, Client, Team, TeamMember, TeamBadge, UserBadge, \
-    SavedProject, RankingProject, SoldProject, Wallet, Referral
+    SavedProject, RankingProject, SoldProject, Wallet, Referral, Service, UserService
 
 
 @admin.register(User)
@@ -82,3 +82,15 @@ class WalletAdmin(admin.ModelAdmin):
 class ReferralAdmin(admin.ModelAdmin):
     list_display = ('id', 'invited_user', 'logged_in_user', 'referral_code', )
     fields = ('invited_user', 'logged_in_user', 'referral_code', )
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'code', 'price', 'is_active', 'active_users', )
+    fields = ('title', 'code', 'price', 'attachment', 'description', 'is_active', )
+
+
+@admin.register(UserService)
+class UserServiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'service', 'user', 'expires_in', 'is_active', )
+    fields = ('service', 'user', 'expires_in', 'is_active', )
