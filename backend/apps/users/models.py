@@ -296,6 +296,10 @@ class Service(BaseModel):
     def __str__(self):
         return self.title
 
+    @property
+    def active_users(self):
+        return self.user_services.filter(is_active=True).count()
+
     class Meta:
         db_table = 'services'
 
@@ -303,6 +307,7 @@ class Service(BaseModel):
 class UserService(BaseModel):
     service = models.ForeignKey(Service, models.CASCADE, 'user_services')
     user = models.ForeignKey(User, models.CASCADE, 'services')
+    expires_in = models.DateTimeField(null=True)
     is_active = models.BooleanField()
 
     def __str__(self):
