@@ -4,9 +4,6 @@ from main.models import Message, Notification, UserTheme, Chat, Theme
 
 class MessageSerializer(serializers.ModelSerializer):
 
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
     class Meta:
         model = Message
         fields = (
@@ -18,9 +15,6 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        return super().to_representation(instance)
 
     class Meta:
         model = Notification
@@ -35,9 +29,6 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 class UserThemeSerializer(serializers.ModelSerializer):
 
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
     class Meta:
         model = UserTheme
         fields = (
@@ -49,9 +40,6 @@ class UserThemeSerializer(serializers.ModelSerializer):
 
 class ChatSerializer(serializers.ModelSerializer):
 
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
     class Meta:
         model = Chat
         fields = (
@@ -62,9 +50,6 @@ class ChatSerializer(serializers.ModelSerializer):
 
 
 class ThemeSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        return super().to_representation(instance)
 
     class Meta:
         model = Theme

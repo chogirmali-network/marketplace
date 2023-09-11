@@ -3,11 +3,6 @@ from company.models import Company, Employee, CompanyField
 
 
 class AddCompanySerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     class Meta:
         model = Company
@@ -26,11 +21,6 @@ class AddCompanySerializer(serializers.ModelSerializer):
 
 
 class AddEmployeeSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     class Meta:
         model = Employee
@@ -44,11 +34,6 @@ class AddEmployeeSerializer(serializers.ModelSerializer):
 
 
 class AddCompanyFieldSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     class Meta:
         model = CompanyField
