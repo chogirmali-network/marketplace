@@ -88,6 +88,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -230,15 +231,15 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = ''
 AWS_DEFAULT_REGION = 'us-east-1'
 
-STORAGES = {
-    "default": {
-        "BACKEND": "core.aws.storage.MediaStorage"
-        # "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3boto3.S3StaticStorage"
-    }
-}
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "core.aws.storage.MediaStorage"
+#         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
+#     },
+#     "staticfiles": {
+#         "BACKEND": "storages.backends.s3boto3.S3StaticStorage"
+#     }
+# }
 
 try:
     from .settings_dev import *
