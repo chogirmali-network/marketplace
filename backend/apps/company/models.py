@@ -31,7 +31,7 @@ class Employee(BaseModel):
     work_ended_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.company.name
+        return f"{self.user.email} ({self.company.name})"
 
     class Meta:
         db_table = 'employees'
