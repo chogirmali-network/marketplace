@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models import Message, Notification, UserTheme,Chat
+from main.models import Message, Notification, UserTheme, Chat
 
 
 class MessageSerializer(serializers.ModelSerializer):
