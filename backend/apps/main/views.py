@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from main.models import UserTheme
-from main.serializers import MessageSerializer, NotificationSerializer, UserThemeSerializer
+from main.serializers import MessageSerializer, NotificationSerializer, UserThemeSerializer, ChatSerializer
 
 
 class MessageView(APIView):
@@ -14,7 +14,21 @@ class MessageView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
     def put(self, request):
-        serializer = MessageSerializer(request.data, partial=True)
+        serializer = MessageSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+
+
+class ChatView(APIView):
+    def post(self, request):
+        serializer = ChatSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+    def put(self, request):
+        serializer = ChatSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_200_OK)
