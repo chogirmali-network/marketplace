@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'main',
     'mediafiles',
     'users',
+    'payments',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -245,3 +246,7 @@ try:
     from .settings_dev import *
 except ImportError:
     pass
+
+STRIPE_PUBLIC_KEY = ""
+STRIPE_SECRET_KEY = ""
+STRIPE_WEBHOOK_SECRET = ""
