@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import User, SubscriptionPlan, Project, Client, Team, TeamMember, TeamBadge, UserBadge, \
-    SavedProject, RankingProject, SoldProject, Wallet, Referral, Service, UserService
+    SavedProject, RankingProject, SoldProject, Wallet, Referral, Service, UserService, Pricing, MoneyPresent, \
+    BadgePresent, VerificationLabelPresent, SubscriptionPlanPresent, SubscriptionPlanPricing
 
 
 @admin.register(User)
@@ -14,8 +15,8 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'plan', 'user', 'price_monthly', 'expires_in', )
-    fields = ('plan', 'user', 'upload_projects', 'themes', 'price_monthly', 'expires_in', )
+    list_display = ('id', 'plan', 'user', 'price_monthly', 'expires_in', 'is_active', )
+    fields = ('plan', 'user', 'upload_projects', 'themes', 'price_monthly', 'expires_in', 'is_active', )
 
 
 @admin.register(Project)
@@ -74,8 +75,8 @@ class SoldProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'account', )
-    fields = ('user', 'account', )
+    list_display = ('id', 'user', 'account', 'is_active', )
+    fields = ('user', 'account', 'is_active', )
 
 
 @admin.register(Referral)
@@ -94,3 +95,39 @@ class ServiceAdmin(admin.ModelAdmin):
 class UserServiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'service', 'user', 'expires_in', 'is_active', )
     fields = ('service', 'user', 'expires_in', 'is_active', )
+
+
+@admin.register(Pricing)
+class PricingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code', 'price', )
+    fields = ('code', 'price', )
+
+
+@admin.register(MoneyPresent)
+class MoneyPresentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'from_user', 'to_user', 'amount', 'status', )
+    fields = ('from_user', 'to_user', 'amount', 'status', )
+
+
+@admin.register(BadgePresent)
+class BadgePresentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'from_user', 'to_user', 'badge', )
+    fields = ('from_user', 'to_user', 'badge', )
+
+
+@admin.register(VerificationLabelPresent)
+class VerificationLabelPresentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'from_user', 'to_user', )
+    fields = ('from_user', 'to_user', )
+
+
+@admin.register(SubscriptionPlanPresent)
+class SubscriptionPlanPresentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'from_user', 'to_user', 'subscription_plan_data', 'price', 'period', )
+    fields = ('from_user', 'to_user', 'subscription_plan_data', 'price', 'period', )
+
+
+@admin.register(SubscriptionPlanPricing)
+class SubscriptionPlanPricingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'plan', 'pricing', 'quotas', )
+    fields = ('plan', 'pricing', )

@@ -4,6 +4,9 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+from django.core.validators import ValidationError
 
 from users.querysets.user import UserManager
 
@@ -84,6 +87,7 @@ class SubscriptionPlan(BaseModel):
     themes = models.PositiveBigIntegerField(validators=[MinValueValidator(3), MaxValueValidator(1000)], default=2)
     price_monthly = models.DecimalField(max_digits=20, decimal_places=2)
     expires_in = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField()
 
     def __str__(self) -> str:
         return self.user.email + ' - ' + self.plan
@@ -246,6 +250,7 @@ class Wallet(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(0)])
+    is_active = models.BooleanField()
 
     def __str__(self) -> str:
         return f'Wallet of {self.user.email}'
@@ -298,7 +303,7 @@ class Service(BaseModel):
 
     @property
     def active_users(self):
-        return self.user_services.filter(is_active=True).count()
+        return self.user_services.filter(is_active=True, deleted_at__isnull=True).count()
 
     class Meta:
         db_table = 'services'
@@ -310,8 +315,156 @@ class UserService(BaseModel):
     expires_in = models.DateTimeField(null=True)
     is_active = models.BooleanField()
 
-    def __str__(self):
-        return self.user
-
     class Meta:
         db_table = 'user_services'
+
+
+class Pricing(BaseModel):
+    BADGE = 'badge'
+    VERIFICATION_LABEL = 'verification_label'
+    CODES = (
+        (BADGE, 'Badge'),
+        (VERIFICATION_LABEL, 'Verification label'),
+    )
+
+    code = models.CharField(max_length=500, choices=CODES)
+    price = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta:
+        db_table = 'pricing'
+
+
+class SubscriptionPlanPricing(BaseModel):
+    plan = models.ForeignKey(SubscriptionPlan, models.PROTECT, 'pricing')
+    pricing = models.ForeignKey(Pricing, models.PROTECT, 'subs_plans')
+
+    @property
+    def quotas(self):
+        return self.pricing.filter(deleted_at__isnull=True).count()
+
+    class Meta:
+        db_table = 'subscription_plan_pricing'
+
+
+class MoneyPresent(BaseModel):
+    PENDING = 'pending'
+    SUCCEED = 'succeed'
+    CANCELED = 'canceled'
+    COMPLETED = 'completed'
+
+    STATUSES = (
+        (PENDING, 'Pending'),
+        (SUCCEED, 'Succeed'),
+        (CANCELED, 'Canceled'),
+        (COMPLETED, 'Completed'),
+    )
+
+    from_user = models.ForeignKey(User, models.SET_NULL, 'given_money_presents', null=True)
+    to_user = models.ForeignKey(User, models.SET_NULL, 'taken_money_presents', null=True)
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUSES, default=PENDING)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            from_user_account = Wallet.objects.filter(user=self.from_user, is_active=True,
+                                                      deleted_at__isnull=True).first()
+            to_user_account = Wallet.objects.filter(user=self.to_user, is_active=True, deleted_at__isnull=True).first()
+
+            if not from_user_account or not to_user_account:
+                raise ValidationError(_('user_not_account_or_inactive'))
+
+            elif from_user_account.account < self.amount:
+                raise ValidationError(_('account_not_enough'))
+
+            elif to_user_account and from_user_account.account >= self.amount:
+                from_user_account.account -= self.amount
+                to_user_account.account += self.amount
+                from_user_account.save()
+                to_user_account.save()
+        super(MoneyPresent, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'money_presents'
+
+
+class BadgePresent(BaseModel):
+    from_user = models.ForeignKey(User, models.SET_NULL, 'given_badge_presents', null=True)
+    to_user = models.ForeignKey(User, models.SET_NULL, 'taken_badge_presents', null=True)
+    badge = models.ForeignKey('mediafiles.Badge', models.PROTECT, 'presents')
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            from_user_account = Wallet.objects.filter(user=self.from_user, is_active=True,
+                                                      deleted_at__isnull=True).first()
+            badge_price = Pricing.objects.filter(code=Pricing.BADGE, deleted_at__isnull=True).first()
+
+            if not from_user_account:
+                raise ValidationError(_('user_not_account_or_inactive'))
+
+            elif from_user_account.account < badge_price.price:
+                raise ValidationError(_('account_not_enough'))
+
+            elif from_user_account.account >= badge_price.price:
+                from_user_account.account -= badge_price.price
+                UserBadge.objects.create(user=self.to_user, badge=self.badge)
+        super(BadgePresent, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'badge_presents'
+
+
+class VerificationLabelPresent(BaseModel):
+    from_user = models.ForeignKey(User, models.SET_NULL, 'given_verification_label_presents', null=True)
+    to_user = models.ForeignKey(User, models.SET_NULL, 'taken_verification_label_presents', null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            from_user_account = Wallet.objects.filter(user=self.from_user, is_active=True,
+                                                      deleted_at__isnull=True).first()
+            verification_label_price = Pricing.objects.filter(code=Pricing.VERIFICATION_LABEL,
+                                                              deleted_at__isnull=True).first()
+
+            if not from_user_account:
+                raise ValidationError(_('user_not_account_or_inactive'))
+
+            elif from_user_account.account < verification_label_price.price:
+                raise ValidationError(_('account_not_enough'))
+
+            elif from_user_account.account >= verification_label_price.price:
+                from_user_account.account -= verification_label_price.price
+                self.to_user.make_verify_account()
+        super(VerificationLabelPresent, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'verification_label_presents'
+
+
+class SubscriptionPlanPresent(BaseModel):
+    from_user = models.ForeignKey(User, models.SET_NULL, 'given_subscription_plan_presents', null=True)
+    to_user = models.ForeignKey(User, models.SET_NULL, 'taken_subscription_plan_presents', null=True)
+    subscription_plan_data = models.JSONField()
+    price = models.DecimalField(max_digits=20, decimal_places=2)
+    period = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            from_user_account = Wallet.objects.filter(user=self.from_user, is_active=True,
+                                                      deleted_at__isnull=True).first()
+            self.subscription_plan_data['is_active'] = False
+            subscription_plan = SubscriptionPlan.objects.create(**self.subscription_plan_data)
+            period = self.period.strftime('%d/%m/%Y - %H:%M:%S')
+            plan_price = subscription_plan.price_monthly + self.price * (period.days / 30)
+
+            if not from_user_account:
+                raise ValidationError(_('user_not_account_or_inactive'))
+
+            elif from_user_account.account < plan_price:
+                raise ValidationError(_('account_not_enough'))
+
+            elif from_user_account.account >= plan_price:
+                subscription_plan.is_active = True
+                subscription_plan.save()
+        super(SubscriptionPlanPresent, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'subscription_plan_presents'
