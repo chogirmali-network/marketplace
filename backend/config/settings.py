@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'main',
     'mediafiles',
     'users',
+    'payments',
 ]
 
 AUTH_USER_MODEL = 'users.User'
