@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("main", "0002_chat_alter_usertheme_options_remove_message_chat_id_and_more"),
+        # ("main", "0002_chat_alter_usertheme_options_remove_message_chat_id_and_more"),
         ("auth", "0012_alter_user_first_name_max_length"),
         ("core", "0002_s3attachment_created_at_s3attachment_deleted_at_and_more"),
     ]
@@ -498,13 +498,13 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("deleted_at", models.DateTimeField(blank=True, null=True)),
-                (
-                    "badge",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="mediafiles.badge",
-                    ),
-                ),
+                # (
+                #     "badge",
+                #     models.ForeignKey(
+                #         on_delete=django.db.models.deletion.CASCADE,
+                #         to="mediafiles.badge",
+                #     ),
+                # ),
                 (
                     "user",
                     models.ForeignKey(
@@ -565,13 +565,13 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("deleted_at", models.DateTimeField(blank=True, null=True)),
-                (
-                    "badge",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="mediafiles.badge",
-                    ),
-                ),
+                # (
+                #     "badge",
+                #     models.ForeignKey(
+                #         on_delete=django.db.models.deletion.CASCADE,
+                #         to="mediafiles.badge",
+                #     ),
+                # ),
                 (
                     "team",
                     models.ForeignKey(
@@ -1034,14 +1034,14 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("deleted_at", models.DateTimeField(blank=True, null=True)),
-                (
-                    "badge",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT,
-                        related_name="presents",
-                        to="mediafiles.badge",
-                    ),
-                ),
+                # (
+                #     "badge",
+                #     models.ForeignKey(
+                #         on_delete=django.db.models.deletion.PROTECT,
+                #         related_name="presents",
+                #         to="mediafiles.badge",
+                #     ),
+                # ),
                 (
                     "from_user",
                     models.ForeignKey(

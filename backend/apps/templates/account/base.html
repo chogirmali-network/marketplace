@@ -3,11 +3,12 @@
   <head>
     <title>{% block head_title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <style>
+      <script src="https://js.stripe.com/v3/"></script>
+      <style>
       .form-group {
         margin-top: 10px;
       }
-    </style>
+      </style>
     {% block extra_head %}
     {% endblock %}
   </head>
