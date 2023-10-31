@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from main.models import Message, Notification, UserTheme
+from main.models import Message, Notification, UserTheme, Chat, Theme
 
 
 class MessageSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Message
         fields = (
@@ -14,6 +15,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Notification
         fields = (
@@ -26,10 +28,33 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class UserThemeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = UserTheme
         fields = (
             'id',
             'theme',
             'user',
+        )
+
+
+class ChatSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Chat
+        fields = (
+            'id',
+            'title',
+            'type'
+        )
+
+
+class ThemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Theme
+        fields = (
+            'id',
+            'name',
+            'link'
         )

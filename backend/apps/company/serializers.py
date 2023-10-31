@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from company.models import Company, Employee
+from company.models import Company, Employee, CompanyField
 
 
 class AddCompanySerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     class Meta:
         model = Company
@@ -26,11 +21,6 @@ class AddCompanySerializer(serializers.ModelSerializer):
 
 
 class AddEmployeeSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        return super().to_representation(instance)
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
     class Meta:
         model = Employee
@@ -38,6 +28,18 @@ class AddEmployeeSerializer(serializers.ModelSerializer):
             'id',
             'company',
             'user',
+            'work_started_at',
+            'work_ended_at',
+        )
+
+
+class AddCompanyFieldSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CompanyField
+        fields = (
+            'id',
+            'title',
             'work_started_at',
             'work_ended_at',
         )
