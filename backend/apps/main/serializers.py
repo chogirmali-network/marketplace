@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models import Message, Notification, UserTheme
+from main.models import Message, Notification, UserTheme, Chat
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -10,6 +10,16 @@ class MessageSerializer(serializers.ModelSerializer):
             'content',
             'chat_id',
             'parse_mode',
+        )
+
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = (
+            'id',
+            'title',
+            'type',
         )
 
 

@@ -8,7 +8,7 @@ from company.serializers import AddCompanySerializer, AddEmployeeSerializer
 
 class AddCompanyView(APIView):
     def post(self, request):
-        serializer = AddCompanySerializer(request.data)
+        serializer = AddCompanySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
@@ -16,7 +16,7 @@ class AddCompanyView(APIView):
 
 class AddEmployeeView(APIView):
     def post(self, request):
-        serializer = AddEmployeeSerializer(request.data)
+        serializer = AddEmployeeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
