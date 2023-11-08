@@ -76,6 +76,10 @@ INSTALLED_APPS = [
     'mediafiles',
     'users',
     'services',
+    'payments',
+
+    # Payments
+    "djstripe",
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -231,6 +235,15 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = ''
 AWS_DEFAULT_REGION = 'us-east-1'
+
+STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "pk_test_51NokYUD2MuvOK7XNBoaJkpDRUHdV1Jt7mAkIWhQ0IdDcOogpW91gufarseqf0Mxe2C94kZauHCrFKpsnNzvWGroi000DfGGZVh")
+STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "sk_test_51NokYUD2MuvOK7XNemrIQdwwQr3q0zw0ZldxZV2P40L887DEaMlcn4nTvPGecCMgrM9wxwu6dhr4kQ5ms793ijt700QN1azSH3")
+STRIPE_LIVE_MODE = False
+DJSTRIPE_WEBHOOK_SECRET = "we_1OA70JD2MuvOK7XNOUJ4VZ4i"
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+DJSTRIPE_WEBHOOK_VALIDATION = "retrieve_event"
+
+STRIPE_PRICE_ID = 'price_1O9uqKD2MuvOK7XNkoX8uQo9'
 
 # STORAGES = {
 #     "default": {

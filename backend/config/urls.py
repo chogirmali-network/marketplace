@@ -8,7 +8,7 @@ from drf_yasg.views import get_schema_view as drf_schema_view
 from drf_yasg import openapi
 
 from rest_framework.permissions import AllowAny
-
+# from ..apps.payments.views import StripeView
 
 schema_view = drf_schema_view(
     openapi.Info(
@@ -24,11 +24,11 @@ schema_view = drf_schema_view(
 
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='dashboard/home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-doc'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-doc'),
     path("accounts/", include("allauth.urls")),
+    path('payments/', include(('payments.urls', 'payments'), namespace='payments')),
     path('api/v1/', include([
         path('users/', include(('users.urls', 'users'), namespace='users')),
         path('company/', include(('company.urls', 'company'), namespace='company')),
@@ -40,3 +40,8 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
+
+
+# [
+#         path('stripe/', StripeView.as_view(), name='stripe-callback-view'),
+#     ]
