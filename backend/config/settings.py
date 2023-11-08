@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-)=qh8^p-9@j*@!(7ee&c3(cum5tpzkz3(f55&f9c($6n-h*$*8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
 
-TESTING = ('test' == sys.argv[1]) if sys.argv else False
+TESTING = False # ('test' == sys.argv[1]) if sys.argv else
 
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
@@ -38,7 +38,13 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.ngrok.io',
     'backend',
+    '.ngrok-free.app',
 ]
+
+CSRF_TRUSTED_ORIGINS = (
+    "http://127.0.0.1",
+    "https://9e13-185-213-229-135.ngrok-free.app"
+)
 
 # Application definition
 
@@ -76,6 +82,10 @@ INSTALLED_APPS = [
     'mediafiles',
     'users',
     'services',
+    'payments',
+
+    # Payments
+    "djstripe",
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -231,6 +241,15 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = ''
 AWS_DEFAULT_REGION = 'us-east-1'
+
+STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY", "pk_test_51NokYUD2MuvOK7XNBoaJkpDRUHdV1Jt7mAkIWhQ0IdDcOogpW91gufarseqf0Mxe2C94kZauHCrFKpsnNzvWGroi000DfGGZVh")
+STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "sk_test_51NokYUD2MuvOK7XNemrIQdwwQr3q0zw0ZldxZV2P40L887DEaMlcn4nTvPGecCMgrM9wxwu6dhr4kQ5ms793ijt700QN1azSH3")
+STRIPE_LIVE_MODE = False
+DJSTRIPE_WEBHOOK_SECRET = ""
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+DJSTRIPE_WEBHOOK_VALIDATION = "retrieve_event"
+
+STRIPE_PRICE_ID = 'price_1O9uqKD2MuvOK7XNkoX8uQo9'
 
 # STORAGES = {
 #     "default": {

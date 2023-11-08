@@ -12,12 +12,13 @@ class SignUpSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['login_type'] = EMAIL
-        validated_data['referral_code'] = generate_referral_code()
+        # validated_data['referral_code'] = generate_referral_code()
         user = super().create(validated_data)
         SubscriptionPlan.objects.create(
             user=user,
             price_monthly=0,
             plan=SubscriptionPlan.FREE,
+            is_active=True,
         )
         return user
 
